@@ -27,5 +27,6 @@ Useful for sanitizing configuration files before sharing or committing.
 ```
 
 ## Install
-
+```powershell
 .\Clear-AppSettings.ps1 -Install
+```
