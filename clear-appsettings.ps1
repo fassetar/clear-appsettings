@@ -52,7 +52,6 @@ function Show-JsonProperties {
     }
 }
 
-# Recursive function to set all properties to empty string (excluding ignored keys)
 function Set-AllJsonPropertiesEmpty {
     param (
         [Parameter(Mandatory = $true)] $Object,
@@ -83,6 +82,27 @@ function Set-AllJsonPropertiesEmpty {
     }
 }
 
+# Backup (skip if backup already exists)
+$backupPath = "$jsonFilePath.bak"
+if (-Not (Test-Path $backupPath)) {
+    Copy-Item $jsonFilePath $backupPath
+    Write-Host "Backup created: $backupPath"
+} else {
+    Write-Host "Backup already exists, skipping: $backupPath"
+}
+
+# Show current properties
+Show-JsonProperties -Object $jsonContent
+
+# Set all properties to empty strings
+Set-AllJsonPropertiesEmpty -Object $jsonContent -SkipKeys $IgnoreProperties
+
+# Output the modified JSON with proper indentation
+Write-Host "Writing cleared JSON to file..."
+$jsonContent | ConvertTo-Json -Depth 100 | Set-Content -Path $jsonFilePath
+Write-Output "All properties have been set to empty strings."
+Write-Host "Done. Output saved to $jsonFilePath"
+
 # Install logic
 if ($Install) {
     $installDir = "C:\Scripts"
@@ -96,7 +116,7 @@ if ($Install) {
     Copy-Item -Path $MyInvocation.MyCommand.Path -Destination $scriptTarget -Force
 
     $shimPath = Join-Path $installDir "$commandName.cmd"
-    "@echo off`npowershell.exe -ExecutionPolicy Bypass -File `"$scriptTarget`" %*" | Set-Content $shimPath -Encoding ASCII
+    "@echo off powershell.exe -ExecutionPolicy Bypass -File `"$scriptTarget`" %*" | Set-Content $shimPath -Encoding UTF8
 
     # Add to user PATH permanently if needed
     $currentPath = [Environment]::GetEnvironmentVariable("Path", "User")
@@ -111,27 +131,6 @@ if ($Install) {
         Write-Host "Temporarily added $installDir to current session PATH."
     }
 
-    Write-Host "Installed as '$commandName'. You can now run it from any terminal:`n   $commandName"
+    Write-Host "Installed as '$commandName'. You can now run it from any terminal: $commandName"
     exit 0
 }
-
-# Backup (skip if backup already exists)
-$backupPath = "$jsonFilePath.bak"
-if (-Not (Test-Path $backupPath)) {
-    Copy-Item $jsonFilePath $backupPath
-    Write-Host "Backup created: $backupPath"
-} else {
-    Write-Host "Backup already exists, skipping: $backupPath"
-}
-
-# Show Current all properties
-Show-JsonProperties -Object $jsonContent
-
-# Set all properties to empty strings
-Set-AllJsonPropertiesEmpty -Object $jsonContent -SkipKeys $IgnoreProperties
-
-# Output the modified JSON
-Write-Host "Writing cleared JSON to file..."
-$jsonContent | ConvertTo-Json -Depth 100 | Set-Content -Path $jsonFilePath
-Write-Output "All properties have been set to empty strings."
-Write-Host "Done. Output saved to $jsonFilePath"
