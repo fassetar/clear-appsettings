@@ -27,3 +27,5 @@ Useful for sanitizing configuration files before sharing or committing.
 ```
 
 ## Install
+
+.\Clear-AppSettings.ps1 -Install

@@ -1,6 +1,7 @@
 param (
     [string]$jsonFilePath = "./appsettings.json",
-    [string[]]$IgnoreProperties = @("LogLevel")
+    [string[]]$IgnoreProperties = @("LogLevel"),
+    [switch]$Install
 )
 
 # Check for file existence
@@ -80,6 +81,38 @@ function Set-AllJsonPropertiesEmpty {
             $property.Value = ""
         }
     }
+}
+
+# Install logic
+if ($Install) {
+    $installDir = "C:\Scripts"
+    $commandName = "clear-appsettings"
+
+    if (-Not (Test-Path $installDir)) {
+        New-Item -ItemType Directory -Path $installDir -Force | Out-Null
+    }
+
+    $scriptTarget = Join-Path $installDir "$commandName.ps1"
+    Copy-Item -Path $MyInvocation.MyCommand.Path -Destination $scriptTarget -Force
+
+    $shimPath = Join-Path $installDir "$commandName.cmd"
+    "@echo off`npowershell.exe -ExecutionPolicy Bypass -File `"$scriptTarget`" %*" | Set-Content $shimPath -Encoding ASCII
+
+    # Add to user PATH permanently if needed
+    $currentPath = [Environment]::GetEnvironmentVariable("Path", "User")
+    if ($currentPath -notlike "*$installDir*") {
+        [Environment]::SetEnvironmentVariable("Path", "$currentPath;$installDir", "User")
+        Write-Host "Added $installDir to user PATH."
+    }
+
+    # Add to current session immediately
+    if ($env:PATH -notlike "*$installDir*") {
+        $env:PATH += ";$installDir"
+        Write-Host "Temporarily added $installDir to current session PATH."
+    }
+
+    Write-Host "Installed as '$commandName'. You can now run it from any terminal:`n   $commandName"
+    exit 0
 }
 
 # Backup (skip if backup already exists)
