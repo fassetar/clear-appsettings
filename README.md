@@ -7,7 +7,7 @@ Below are alternative solutions that follow best practices. However, I chose thi
 Additionally, this project serves as a valuable reference for building my own micro command-line tools in the future.
 
 ## ⚠️ Warning: appsettings.json Format Issue
-You may encounter formatting issues with appsettings.json after running or modifying the project. This is expected behavior and should be automatically corrected by your IDE (e.g., Visual Studio or Visual Code).I had considered handling this more explicitly using Newtonsoft.Json for more robust control, but chose not to implement it in order to keep
+You may encounter formatting issues with appsettings.json after running. This is expected behavior and should be automatically corrected by your IDE (e.g., Visual Studio or Visual Code). I had considered handling this more explicitly using Newtonsoft.Json for more robust control, but chose not to implement it in order to keep things simple.
 ---
 
 ## 📦 Features
