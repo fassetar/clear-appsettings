@@ -2,6 +2,10 @@
 This PowerShell script recursively clears all property values in an `appsettings.json` file by setting them to empty strings (`""`). 
 Useful for sanitizing configuration files before sharing or committing.
 
+### Why this Project
+Below is alternative solutions for best practices but I needed this because I didnt want to change how things were listed in the source
+and didnt have a better option because I didnt want to change the way the client had the code setup.
+
 ---
 
 ## 📦 Features
@@ -30,3 +34,76 @@ Useful for sanitizing configuration files before sharing or committing.
 ```powershell
 .\Clear-AppSettings.ps1 -Install
 ```
+
+# 🔐 Best Practices for Handling Secrets in ASP.NET Core
+
+This guide explains how to avoid storing passwords and secrets in `appsettings.json` in ASP.NET Core applications. It covers development and production scenarios, with recommended secure alternatives.
+
+---
+
+## ✅ Use Secret Manager (for development only)
+
+- Keeps secrets outside `appsettings.json` and source control.
+- Stores secrets in a user profile folder (not in the project directory).
+
+**Example:**
+```bash
+dotnet user-secrets init
+dotnet user-secrets set "ConnectionStrings:MyDb" "Server=...;Password=..."
+```
+
+- Loads automatically during development via `IConfiguration`.
+
+---
+
+## ✅ Use Environment Variables (Recommended for production)
+
+- Secure and container-friendly.
+- Automatically overrides values from `appsettings.json`.
+
+**Example:**
+```bash
+export ConnectionStrings__MyDb="Server=...;Password=..."
+```
+
+---
+
+## ✅ Use a Secret Store or Key Vault (for cloud/enterprise apps)
+
+- Services like Azure Key Vault, AWS Secrets Manager, or HashiCorp Vault.
+- Integrated with ASP.NET Core's configuration system.
+
+**Azure Example:**
+```csharp
+builder.Configuration.AddAzureKeyVault(
+    new Uri(keyVaultUri), 
+    new DefaultAzureCredential());
+```
+
+---
+
+## ✅ Restrict `appsettings.json` and source control
+
+- Avoid checking secrets into version control.
+- Add `appsettings.*.json` to `.gitignore` for local development.
+- Use placeholders in committed config files.
+
+---
+
+## ✅ Use `IOptions<T>` or strongly typed configuration binding
+
+- Keeps secrets isolated from the rest of your code.
+- Easier unit testing and mocking.
+
+---
+
+## 🚫 What Not to Do
+
+- ❌ Don’t store plaintext secrets in `appsettings.json`.
+- ❌ Don’t log sensitive configuration:
+```csharp
+// BAD PRACTICE!
+logger.LogInformation(configuration.GetConnectionString("MyDb"));
+```
+
+---
