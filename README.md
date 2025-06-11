@@ -6,11 +6,8 @@ Useful for sanitizing configuration files before sharing or committing.
 Below are alternative solutions that follow best practices. However, I chose this approach because I wanted to preserve the original structure of the source code and avoid modifying the client’s existing code setup. 
 Additionally, this project serves as a valuable reference for building my own micro command-line tools in the future.
 
-⚠️ Warning: appsettings.json Format Issue
-
-You may encounter formatting issues with appsettings.json after running or modifying the project. This is expected behavior and should be automatically corrected by your IDE (e.g., Visual Studio or Visual Code).
-
-I had considered handling this more explicitly using Newtonsoft.Json for more robust control, but chose not to implement it in order to keep the solution simple and avoid unnecessary complexity.
+## ⚠️ Warning: appsettings.json Format Issue
+You may encounter formatting issues with appsettings.json after running or modifying the project. This is expected behavior and should be automatically corrected by your IDE (e.g., Visual Studio or Visual Code).I had considered handling this more explicitly using Newtonsoft.Json for more robust control, but chose not to implement it in order to keep
 ---
 
 ## 📦 Features
