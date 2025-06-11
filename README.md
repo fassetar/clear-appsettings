@@ -3,8 +3,8 @@ This PowerShell script recursively clears all property values in an `appsettings
 Useful for sanitizing configuration files before sharing or committing.
 
 ### Why this Project
-Below is alternative solutions for best practices but I needed this because I didnt want to change how things were listed in the source
-and I didnt want to change the way the client had the code setup.
+Below are alternative solutions that follow best practices. However, I chose this approach because I wanted to preserve the original structure of the source code and avoid modifying the client’s existing code setup. 
+Additionally, this project serves as a valuable reference for building my own micro command-line tools in the future.
 
 ---
 
