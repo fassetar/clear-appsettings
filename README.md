@@ -4,7 +4,7 @@ Useful for sanitizing configuration files before sharing or committing.
 
 ### Why this Project
 Below is alternative solutions for best practices but I needed this because I didnt want to change how things were listed in the source
-and didnt have a better option because I didnt want to change the way the client had the code setup.
+and I didnt want to change the way the client had the code setup.
 
 ---
 
