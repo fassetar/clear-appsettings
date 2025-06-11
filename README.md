@@ -21,12 +21,12 @@ Useful for sanitizing configuration files before sharing or committing.
 .\Clear-AppSettings.ps1
 ```
 
-# Custom Path
+### Custom Path
 ```powershell
 .\Clear-AppSettings.ps1 -jsonFilePath "C:\Path\To\Your\appsettings.json" -IgnoreProperties "LogLevel", "ConnectionStrings"
 ```
 
-## Install
+### Install
 ```powershell
 .\Clear-AppSettings.ps1 -Install
 ```
